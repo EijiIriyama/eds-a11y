@@ -15,7 +15,7 @@ axe
     // eslint-disable-next-line no-undef
     if (adobeDataLayer) {
       // eslint-disable-next-line no-undef
-      adobeDataLayer.push(results);
+      adobeDataLayer.push({ a11y: results });
     }
     if (results.violations.length) {
       throw new Error('Accessibility issues found');
