@@ -37,6 +37,7 @@ function constructPayload(form) {
 async function submitForm(form) {
   const payload = constructPayload(form);
   payload.timestamp = new Date().toJSON();
+  console.log(form.dataset.action);
   const resp = await fetch(form.dataset.action, {
     method: 'POST',
     cache: 'no-cache',
@@ -98,7 +99,9 @@ function createTextArea(fd) {
 
 function createLabel(fd) {
   const label = document.createElement('label');
-  label.setAttribute('for', fd.Field);
+  if (fd.Field !== 'first') {
+    label.setAttribute('for', fd.Field);
+  }
   label.textContent = fd.Label;
   if (fd.Mandatory === 'x') {
     label.classList.add('required');
