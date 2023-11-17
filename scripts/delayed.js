@@ -15,7 +15,7 @@ const formatResults = (rawResults) => {
 axe
   .run()
   .then((rawResults) => {
-    const violationsCount = rawResults.vaiolation.length;
+    const violationsCount = rawResults.violations.length;
     const inapplicableCount = rawResults.inapplicable.length;
     const incompleteCount = rawResults.incomplete.length;
     const passesCount = rawResults.passes.length;
