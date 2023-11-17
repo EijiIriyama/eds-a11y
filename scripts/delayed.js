@@ -5,19 +5,36 @@ import { sampleRUM } from './aem.js';
 sampleRUM('cwv');
 
 // add more delayed functionality here
+const formatResults = (rawResults) => {
+  const violations = rawResults.violations.flatMap((data) => data.nodes.map((node) => `violation:${data.id}:${node.impact}:${node.target[0]}`));
+  const incompletes = rawResults.incomplete.flatMap((data) => data.nodes.map((node) => `incomplete:${data.id}:${node.impact}:${node.target[0]}`));
+  return violations.concat(incompletes).join(',');
+}
 
 // eslint-disable-next-line no-undef
 axe
   .run()
-  .then((results) => {
-    console.log('Results: ', results);
+  .then((rawResults) => {
+    const violationsCount = rawResults.vaiolation.length;
+    const inapplicableCount = rawResults.inapplicable.length;
+    const incompleteCount = rawResults.incomplete.length;
+    const passesCount = rawResults.passes.length;
+    const results = formatResults(rawResults);
 
     // eslint-disable-next-line no-undef
     if (adobeDataLayer) {
       // eslint-disable-next-line no-undef
-      adobeDataLayer.push({ a11y: results });
+      adobeDataLayer.push({ 
+        a11y: {
+          violationsCount: violationsCount,
+          inapplicableCount: inapplicableCount,
+          incompleteCount: incompleteCount,
+          passesCount: passesCount,
+          results: results
+        }
+      });
     }
-    if (results.violations.length) {
+    if (rawResults.violations.length) {
       throw new Error('Accessibility issues found');
     }
   })
