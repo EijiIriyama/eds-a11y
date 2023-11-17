@@ -15,10 +15,9 @@ const formatResults = (rawResults) => {
 axe
   .run()
   .then((rawResults) => {
-    const violationsCount = rawResults.violations.length;
-    const inapplicableCount = rawResults.inapplicable.length;
-    const incompleteCount = rawResults.incomplete.length;
-    const passesCount = rawResults.passes.length;
+    const violationsCount = rawResults.violations.flatMap((data) => data.nodes).length;
+    const incompleteCount = rawResults.incomplete.flatMap((data) => data.nodes).length;
+    const passesCount = rawResults.passes.flatMap((data) => data.nodes).length;
     const results = formatResults(rawResults);
 
     // eslint-disable-next-line no-undef
@@ -27,7 +26,6 @@ axe
       adobeDataLayer.push({ 
         a11y: {
           violationsCount: violationsCount,
-          inapplicableCount: inapplicableCount,
           incompleteCount: incompleteCount,
           passesCount: passesCount,
           results: results
